@@ -10,8 +10,16 @@ namespace ConsolePong
     public class Ball
     {
         Coordinate[] coordinates = { new Coordinate(0,0), new Coordinate(-1,0) };
-        Random rnd = new Random();
         Angle angle = new Angle();
+
+        Player player1;
+        Player player2;
+
+        public Ball (Player pl1, Player pl2)
+        {
+            player1 = pl1;
+            player2 = pl2;
+        }
 
         public void StartMoving()
         {
@@ -25,16 +33,23 @@ namespace ConsolePong
         {
             while (true)
             {
+
                 if (IsHorizontalBorderNear())
                 {
                     angle.HorizontalMirror();
                 }
                 if (IsVerticalBorderNear())
                 {
+                    PlayGround.Clear(coordinates);
+                    coordinates[0] = new Coordinate(0, 0);
+                    coordinates[1] = new Coordinate(-1, 0);
+                }              
+                if (IsLeftPlayerNear() || IsRightPlayerNear())
+                {
                     angle.VerticalMirror();
                 }
 
-                Clear();
+                PlayGround.Clear(coordinates);
 
                 switch (angle.ToInt())
                 {
@@ -52,36 +67,13 @@ namespace ConsolePong
                         break;
                 }
 
-                Draw();
+                PlayGround.Draw(coordinates);
+
                 Thread.Sleep(200);
             }
         }
 
-
-        public void Draw()
-        {
-            //test
-            Console.SetCursorPosition(0, 0);
-            Console.Write($"[{coordinates[0].X}, {coordinates[0].Y}]");
-            //test
-
-            foreach (var cord in coordinates)
-            {
-                Console.SetCursorPosition(cord.X, cord.Y);
-                Console.Write("█");
-            }         
-        }
-
-        public void Clear()
-        {
-            foreach (var cord in coordinates)
-            {
-                Console.SetCursorPosition(cord.X, cord.Y);
-                Console.Write(" ");
-            }
-        }
-
-        public bool IsHorizontalBorderNear()
+        private bool IsHorizontalBorderNear()
         {
             foreach (var cord in coordinates)
             {
@@ -97,8 +89,7 @@ namespace ConsolePong
             return false;
         }
 
-
-        public bool IsVerticalBorderNear()
+        private bool IsVerticalBorderNear()
         {
             foreach (var cord in coordinates)
             {
@@ -112,6 +103,66 @@ namespace ConsolePong
                 }
             }
             return false;
+        }
+
+        private bool IsLeftPlayerNear()
+        {
+            if (coordinates[0].X == 13)
+            {
+                foreach (var cord in coordinates)
+                {
+                    var playercord = player1.GetCord();
+
+                    foreach (var plcord in playercord)
+                    {
+                        if (cord.X - 1 == plcord.X && cord.Y == plcord.Y)
+                        {
+                            return true;
+                        }
+                    }
+
+                }
+            }
+     
+            return false;
+        }
+
+        private bool IsRightPlayerNear()
+        {
+            if (coordinates[0].X == 91)
+            {
+                foreach (var cord in coordinates)
+                {
+                    var playercord = player2.GetCord();
+
+                    foreach (var plcord in playercord)
+                    {
+                        if (cord.X + 1 == plcord.X && cord.Y == plcord.Y)
+                        {
+                            return true;
+                        }
+                    }
+
+                }
+            }
+
+            return false;
+        }
+
+        public bool IsMovingRight()
+        {
+            if (angle.ToInt() == 45 || angle.ToInt() == 315)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public Coordinate GetCord()
+        {
+            return coordinates[0];
         }
     }
 }

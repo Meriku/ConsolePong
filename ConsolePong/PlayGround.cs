@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ConsolePong
 {
     public class PlayGround
     {
+        public static bool IsDrawing = false;
+
         public const int Width = 102;
         public const int Height = 28;
 
@@ -28,5 +31,43 @@ namespace ConsolePong
                 }
             }
         }
+
+        public static void Draw(Coordinate[] coordinates)
+        {
+            while (IsDrawing)
+            {
+                Thread.Sleep(1);
+            }
+
+            IsDrawing = true;
+
+            foreach (var cord in coordinates)
+            {
+                Console.SetCursorPosition(cord.X, cord.Y);
+                Console.Write("█");
+            }
+
+            IsDrawing = false;
+
+        }
+        public static void Clear(Coordinate[] coordinates)
+        {
+            while (IsDrawing)
+            {
+                Thread.Sleep(1);
+            }
+
+            IsDrawing = true;
+
+            foreach (var cord in coordinates)
+            {
+                Console.SetCursorPosition(cord.X, cord.Y);
+                Console.Write(" ");
+            }
+
+            IsDrawing = false;
+
+        }
+
     }
 }

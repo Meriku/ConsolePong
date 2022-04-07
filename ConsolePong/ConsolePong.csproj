@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="Angle.cs" />
     <Compile Include="Ball.cs" />
-    <Compile Include="Coordinates.cs" />
+    <Compile Include="Coordinate.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayGround.cs" />

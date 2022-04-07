@@ -10,25 +10,27 @@ namespace ConsolePong
     {
         static void Main(string[] args)
         {
+            //TODO: Score; difficulty levels; choosing opponents (another player or computer);
 
             Console.SetWindowSize(PlayGround.Width, PlayGround.Height);
             Console.SetBufferSize(PlayGround.Width, PlayGround.Height);
             Console.CursorVisible = false;
 
-            PlayGround.DrawBorders();
+            PlayGround.DrawBorders();       
 
-            var ball = new Ball();
+            var player1 = new Player("WASD");
+
+            var player2 = new Player("Arrows");
+
+            var player3 = new Player("Computer");
+
+            var ball = new Ball(player1, player3);
+
+            player3.ball = ball;
 
             ball.StartMoving();
-
-
-
-
-
-
-
-            Console.ReadLine();
-
+            player1.StartPlaying();
+            player3.StartPlaying();
 
         }
     }
