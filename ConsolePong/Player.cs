@@ -9,17 +9,23 @@ namespace ConsolePong
 {
     public class Player
     {
+        private int Score = 0;
         private int PlayerType;
+        private int DifficultyLevel = 1; // 1 - Easy; 2 - Standard; 3 - Hard
         private Coordinate[] coordinates = new Coordinate[10];
         Random rnd = new Random();
 
         public Ball ball { private get; set; }
         
+        public Player()
+        {
+
+        }
         public Player (string type)
         {
             if (type.ToLower().Equals("wasd"))
             {
-                PlayerType = 1;
+                PlayerType = 1;          
                 var index = 0;
                 for (var i = -2; i < 3; i++)
                 {                  
@@ -30,7 +36,6 @@ namespace ConsolePong
                     }                 
                 }
             }
-
             if (type.ToLower().Equals("arrows"))
             {
                 PlayerType = 2;
@@ -43,11 +48,14 @@ namespace ConsolePong
                         index++;
                     }
                 }
-            }
-
+            }     
+        }
+        public Player(string type, int difflevel)
+        {
             if (type.ToLower().Equals("computer"))
             {
                 PlayerType = 3;
+                DifficultyLevel = difflevel;
                 var index = 0;
                 for (var i = -2; i < 3; i++)
                 {
@@ -56,27 +64,33 @@ namespace ConsolePong
                         coordinates[index] = new Coordinate(41 + j, i);
                         index++;
                     }
-                }
+                }               
             }
         }
-
         public void StartPlaying()
         {
             PlayGround.Draw(coordinates);
 
             if (PlayerType == 3)
             {
+                PlayGround.Draw($"Score: {Score}", 94, 0);
                 Thread thread = new Thread(new ThreadStart(AIMoving));
+                thread.Start();
+            }
+            else if (PlayerType == 2)
+            {
+                PlayGround.Draw($"Score: {Score}", 94, 0);
+                Thread thread = new Thread(new ThreadStart(Move));
                 thread.Start();
             }
             else
             {
+                PlayGround.Draw($"Score: {Score}", 2, 0);
                 Thread thread = new Thread(new ThreadStart(Move));
                 thread.Start();
             }
            
         }
-
         public void Move()
         {
             while (true)
@@ -105,7 +119,6 @@ namespace ConsolePong
                 PlayGround.Draw(coordinates);
             }
         }
-
         public void AIMoving()
         {
             while (true)
@@ -126,10 +139,21 @@ namespace ConsolePong
                     PlayGround.Draw(coordinates);
                 }                     
 
-                Thread.Sleep(rnd.Next(150, 300));
+                switch (DifficultyLevel)
+                {
+                    case 1:
+                        Thread.Sleep(rnd.Next(150, 300));
+                        break;
+                    case 2:
+                        Thread.Sleep(rnd.Next(100, 250));
+                        break;
+                    case 3:
+                        Thread.Sleep(rnd.Next(50, 100));
+                        break;
+                }
+                
             }    
         }
-
         public bool IsNearUpBorded()
         {
             foreach (var cord in coordinates)
@@ -141,7 +165,6 @@ namespace ConsolePong
             }
             return false;
         }
-
         public bool IsNearDownBorded()
         {
             foreach (var cord in coordinates)
@@ -153,7 +176,26 @@ namespace ConsolePong
             }
             return false;
         }
+        public void ScoreUp()
+        {
+            Score++;
 
+            if (PlayerType == 1)
+            {
+                PlayGround.Draw($"Score: {Score}", 2, 0);
+            }
+            else
+            {
+                if (Score < 10)
+                {
+                    PlayGround.Draw($"Score: {Score}", 94, 0);
+                }
+                else
+                {
+                    PlayGround.Draw($"Score: {Score}", 93, 0);
+                }            
+            }
+        }
         public Coordinate[] GetCord()
         {
             return coordinates;

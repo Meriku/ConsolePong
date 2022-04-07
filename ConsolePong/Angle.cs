@@ -16,7 +16,6 @@ namespace ConsolePong
             angle = 0;
             degrees = 0;
         }
-
         public void SetRndAngle()
         {
             var rnd = new Random();
@@ -40,7 +39,6 @@ namespace ConsolePong
                 angle = 315;
             }
         }
-
         public void HorizontalMirror()
         {
             switch (angle)
@@ -59,7 +57,6 @@ namespace ConsolePong
                     break;
             }
         }   
-
         public void VerticalMirror()
         {
             switch (angle)
@@ -78,7 +75,6 @@ namespace ConsolePong
                     break;
             }
         }
-
         public int ToInt()
         {
             return angle;

@@ -9,6 +9,7 @@ namespace ConsolePong
 {
     public class PlayGround
     {
+        
         public static bool IsDrawing = false;
 
         public const int Width = 102;
@@ -30,6 +31,21 @@ namespace ConsolePong
                     }      
                 }
             }
+        }
+
+        public static void Draw(string text, int cordx, int cordy)
+        {
+            while (IsDrawing)
+            {
+                Thread.Sleep(1);
+            }
+
+            IsDrawing = true;
+
+            Console.SetCursorPosition(cordx, cordy);
+            Console.Write(text);
+
+            IsDrawing = false;
         }
 
         public static void Draw(Coordinate[] coordinates)

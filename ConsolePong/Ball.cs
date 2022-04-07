@@ -15,12 +15,14 @@ namespace ConsolePong
         Player player1;
         Player player2;
 
+        public Ball()
+        {
+        }
         public Ball (Player pl1, Player pl2)
         {
             player1 = pl1;
             player2 = pl2;
         }
-
         public void StartMoving()
         {
             angle.SetRndAngle();
@@ -28,7 +30,6 @@ namespace ConsolePong
             Thread thread = new Thread(new ThreadStart(Move));
             thread.Start();
         }
-
         private void Move()
         {
             while (true)
@@ -40,9 +41,15 @@ namespace ConsolePong
                 }
                 if (IsVerticalBorderNear())
                 {
-                    PlayGround.Clear(coordinates);
-                    coordinates[0] = new Coordinate(0, 0);
-                    coordinates[1] = new Coordinate(-1, 0);
+                    if (coordinates[0].X < PlayGround.Width / 2)
+                    {
+                        player2.ScoreUp();
+                    }
+                    else 
+                    {
+                        player1.ScoreUp();
+                    }           
+                    RespawnBall();
                 }              
                 if (IsLeftPlayerNear() || IsRightPlayerNear())
                 {
@@ -69,10 +76,9 @@ namespace ConsolePong
 
                 PlayGround.Draw(coordinates);
 
-                Thread.Sleep(200);
+                Thread.Sleep(150);
             }
         }
-
         private bool IsHorizontalBorderNear()
         {
             foreach (var cord in coordinates)
@@ -88,7 +94,6 @@ namespace ConsolePong
             }          
             return false;
         }
-
         private bool IsVerticalBorderNear()
         {
             foreach (var cord in coordinates)
@@ -104,7 +109,6 @@ namespace ConsolePong
             }
             return false;
         }
-
         private bool IsLeftPlayerNear()
         {
             if (coordinates[0].X == 13)
@@ -126,7 +130,6 @@ namespace ConsolePong
      
             return false;
         }
-
         private bool IsRightPlayerNear()
         {
             if (coordinates[0].X == 91)
@@ -148,7 +151,12 @@ namespace ConsolePong
 
             return false;
         }
-
+        private void RespawnBall()
+        {
+            PlayGround.Clear(coordinates);
+            coordinates[0] = new Coordinate(0, 0);
+            coordinates[1] = new Coordinate(-1, 0);
+        }
         public bool IsMovingRight()
         {
             if (angle.ToInt() == 45 || angle.ToInt() == 315)

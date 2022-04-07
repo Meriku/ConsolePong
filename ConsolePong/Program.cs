@@ -9,29 +9,40 @@ namespace ConsolePong
     internal class Program
     {
         static void Main(string[] args)
-        {
-            //TODO: Score; difficulty levels; choosing opponents (another player or computer);
-
+        {    
             Console.SetWindowSize(PlayGround.Width, PlayGround.Height);
             Console.SetBufferSize(PlayGround.Width, PlayGround.Height);
             Console.CursorVisible = false;
 
-            PlayGround.DrawBorders();       
+            Player player1 = new Player("WASD");
+            Player player2 = new Player();
+            Ball ball = new Ball();
 
-            var player1 = new Player("WASD");
+            int opponent = MainMenu.AskAboutOpponent();
+            
+            switch (opponent)
+            {
+                case 1:
+                    player2 = new Player("Arrows");
+                    ball = new Ball(player1, player2);
+                    break;
+                case 2:
+                    int diffuculty = MainMenu.AskAboutDifficulty();
+                    player2 = new Player("Computer", diffuculty);
+                    ball = new Ball(player1, player2);
+                    player2.ball = ball;
+                    break;
+            }
 
-            var player2 = new Player("Arrows");
+            PlayGround.Draw("Press any key to start the Game!", PlayGround.Width / 2 - 14, 12);
+            Console.ReadKey();
+            Console.Clear();
 
-            var player3 = new Player("Computer");
-
-            var ball = new Ball(player1, player3);
-
-            player3.ball = ball;
-
+            PlayGround.DrawBorders();
             ball.StartMoving();
             player1.StartPlaying();
-            player3.StartPlaying();
+            player2.StartPlaying();
 
-        }
+        }    
     }
 }

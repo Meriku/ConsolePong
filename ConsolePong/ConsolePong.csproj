@@ -47,6 +47,7 @@
     <Compile Include="Ball.cs" />
     <Compile Include="Coordinate.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="MainMenu.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayGround.cs" />
     <Compile Include="Program.cs" />
